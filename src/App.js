@@ -13,7 +13,12 @@ class App extends React.Component {
 		this.state = {
 			activePanel: 'home',
 			fetchedUser: null,
+			search: '',
+			hasPasswords: localStorage.passwords ? true: false,
+			passwords: localStorage.passwords ? JSON.parse(localStorage.passwords) : null
 		};
+
+		this.onSearch = this.onSearch.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,10 +38,19 @@ class App extends React.Component {
 		this.setState({ activePanel: e.currentTarget.dataset.to })
 	};
 
+	onSearch(text) { this.setState({ search: text }); }
+
+	get passwords() {
+		if(this.state.passwords === null) return [];
+
+		const search = this.state.search.toLowerCase();
+		return this.state.passwords.filter(({login}) => login.toLowerCase().indexOf(search) > -1);
+	}
+
 	render() {
 		return (
 			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
+				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} passwords={this.state.passwords} onSearch={this.onSearch} search={this.state.search} result={this.passwords} />
 				<Persik id="persik" go={this.go} />
 			</View>
 		);
