@@ -6,6 +6,12 @@ import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Persik from './panels/Persik';
 
+const settings = {
+	client_id: 0, // APP_ID
+	client_secret: '', // Секретный ключ приложения
+	client_token: '' // Сервисный ключ доступа
+};
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -15,7 +21,8 @@ class App extends React.Component {
 			fetchedUser: null,
 			search: '',
 			hasPasswords: localStorage.passwords ? true: false,
-			passwords: localStorage.passwords ? JSON.parse(localStorage.passwords) : null
+			passwords: localStorage.passwords ? JSON.parse(localStorage.passwords) : null,
+			valid: null
 		};
 
 		this.onSearch = this.onSearch.bind(this);
@@ -32,6 +39,7 @@ class App extends React.Component {
 			}
 		});
 		connect.send('VKWebAppGetUserInfo', {});
+		this.setState({ valid: this.checkSign() });
 	}
 
 	go = (e) => {
@@ -46,6 +54,30 @@ class App extends React.Component {
 		const search = this.state.search.toLowerCase();
 		return this.state.passwords.filter(({login}) => login.toLowerCase().indexOf(search) > -1);
 	}
+
+	checkSign() {
+			if(!window.location.search) return false;
+			
+			const crypto = require('crypto');
+
+			let params = window.location.search.replace('?', '').split('&'),
+					arr = [];
+
+			params.forEach((param, i) => {
+				if(param.indexOf('vk_') !== -1) arr[i] = param;
+			});
+
+			arr = arr.sort().join('&');
+
+			let hash = crypto.createHmac('sha256', settings.client_secret).update(arr).digest('base64'),
+					sign = hash.replace(/\//g, '_').replace(/=/g, ''),
+					vk_sign = window.location.search.match(new RegExp('sign=([^&=]+)'))[1] || '';
+					
+			console.log(`sign checking result:`, sign === vk_sign);
+			if(sign !== vk_sign) console.warn(`sign isn't valid`);
+
+			return (sign === vk_sign);
+	};
 
 	render() {
 		return (
