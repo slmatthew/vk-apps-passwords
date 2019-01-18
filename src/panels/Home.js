@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, List, Cell,Group, Avatar, PanelHeader, FixedLayout, Search, Button } from '@vkontakte/vkui';
+import { Panel, ListItem, List, Cell, Group, Avatar, PanelHeader, FixedLayout, Search, Button, HeaderButton } from '@vkontakte/vkui';
+
+import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 const Home = ({ id, fetchedUser, search, onSearch, result, passwords }) => (
 	<Panel id={id}>
-		<PanelHeader noShadow>Пароли</PanelHeader>
+		<PanelHeader
+			noShadow
+			left={<HeaderButton><Icon24Add /></HeaderButton>}
+		>
+			Пароли
+		</PanelHeader>
 		<FixedLayout vertical="top">
       <Search value={search} onChange={onSearch}/>
     </FixedLayout>
@@ -21,7 +28,9 @@ const Home = ({ id, fetchedUser, search, onSearch, result, passwords }) => (
 		</div>}
 		{search.length === 0 && passwords &&
 		<Group title="Мои пароли">
-			{passwords.map((pass, key) => <Cell key={key} description={pass.password}>{pass.login}</Cell>)}
+			<List>
+				{passwords.map((pass, key) => <Cell key={key} description={pass.password}>{pass.login}</Cell>)}
+			</List>
 		</Group>}
 		{result.length > 0 && search.length !== 0 &&
 		<Group>
