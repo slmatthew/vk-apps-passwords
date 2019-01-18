@@ -6,11 +6,7 @@ import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Persik from './panels/Persik';
 
-const settings = {
-	client_id: 0, // APP_ID
-	client_secret: '', // Секретный ключ приложения
-	client_token: '' // Сервисный ключ доступа
-};
+const settings = require('./settings');
 
 class App extends React.Component {
 	constructor(props) {
