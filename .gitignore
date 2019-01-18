@@ -17,4 +17,4 @@ package-lock.json
 .vscode
 .idea
 
-settings.js
+src/settings.js
