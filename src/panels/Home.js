@@ -6,7 +6,7 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import Footer from './Footer';
 
-const Home = ({ id, fetchedUser, search, onSearch, result, passwords, openAbout }) => (
+const Home = ({ id, fetchedUser, search, onSearch, result, passwords, openAbout, openActionSheet }) => (
 	<Panel id={id}>
 		<PanelHeader
 			noShadow
@@ -31,7 +31,7 @@ const Home = ({ id, fetchedUser, search, onSearch, result, passwords, openAbout 
 		{search.length === 0 && passwords &&
 		<Group title="Мои пароли">
 			<List>
-				{passwords.map((pass, key) => <Cell key={key} description={pass.password}>{pass.login}</Cell>)}
+				{passwords.map((pass, key) => <Cell key={key} description={pass.password} onClick={() => openActionSheet(key)}>{pass.login}</Cell>)}
 			</List>
 		</Group>}
 		{result.length > 0 && search.length !== 0 &&

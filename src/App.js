@@ -1,6 +1,6 @@
 import React from 'react';
 import connect from '@vkontakte/vkui-connect';
-import { View } from '@vkontakte/vkui';
+import { View, ActionSheet, ActionSheetItem, platform, IOS } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
@@ -18,11 +18,13 @@ class App extends React.Component {
 			search: '',
 			hasPasswords: localStorage.passwords ? true: false,
 			passwords: localStorage.passwords ? JSON.parse(localStorage.passwords) : null,
-			valid: null
+			valid: null,
+			popout: null
 		};
 
 		this.onSearch = this.onSearch.bind(this);
 		this.openAbout = this.openAbout.bind(this);
+		this.openActionSheet = this.openActionSheet.bind(this);
 	}
 
 	componentDidMount() {
@@ -78,10 +80,39 @@ class App extends React.Component {
 
 	openAbout() { this.setState({ activePanel: 'persik' }); }
 
+	openActionSheet(i) {
+		if(!this.state.passwords[i]) return;
+		
+		let note = this.state.passwords[i];
+		
+		this.setState({ popout: 
+			<ActionSheet
+				onClose={() => this.setState({ popout: null })}
+				title={`Аккаунт «${note.login}»`}
+				text="Действия с аккаунтом"
+			>
+				<ActionSheetItem autoclose>Скопировать пароль</ActionSheetItem>
+				<ActionSheetItem autoclose>Редактировать</ActionSheetItem>
+				<ActionSheetItem autoclose theme="destructive">Удалить</ActionSheetItem>
+				{platform() === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+			</ActionSheet>
+		});
+	}
+
 	render() {
 		return (
-			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} passwords={this.state.passwords} onSearch={this.onSearch} search={this.state.search} result={this.passwords} openAbout={this.openAbout} />
+			<View activePanel={this.state.activePanel} popout={this.state.popout}>
+				<Home
+					id="home"
+					fetchedUser={this.state.fetchedUser}
+					go={this.go}
+					passwords={this.state.passwords}
+					onSearch={this.onSearch}
+					search={this.state.search}
+					result={this.passwords}
+					openAbout={this.openAbout}
+					openActionSheet={this.openActionSheet}
+				/>
 				<Persik id="persik" go={this.go} />
 			</View>
 		);
