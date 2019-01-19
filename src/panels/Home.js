@@ -4,7 +4,9 @@ import { Panel, ListItem, List, Cell, Group, Avatar, PanelHeader, FixedLayout, S
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
-const Home = ({ id, fetchedUser, search, onSearch, result, passwords }) => (
+import Footer from './Footer';
+
+const Home = ({ id, fetchedUser, search, onSearch, result, passwords, openAbout }) => (
 	<Panel id={id}>
 		<PanelHeader
 			noShadow
@@ -33,15 +35,22 @@ const Home = ({ id, fetchedUser, search, onSearch, result, passwords }) => (
 			</List>
 		</Group>}
 		{result.length > 0 && search.length !== 0 &&
-		<Group>
+		<Group title="Мои пароли">
 			<List>
 				{result.map((pass, key) => <Cell key={key} description={pass.password}>{pass.login}</Cell>)}
+			</List>
+		</Group>}
+		{result.length <= 0 && search.length !== 0 &&
+		<Group title="Мои пароли">
+			<List>
+				<Cell description={`По запросу «${search}» ничего не найдено`} multiline={true}><span style={{ color: 'var()' }}>Нет результатов</span></Cell>
 			</List>
 		</Group>}
 		{!passwords &&
 		<Group title="For debug">
 			<Button onClick={() => localStorage.passwords = JSON.stringify([{ login: 'user1', password: 'password1' }, { login: 'adminka', password: 'paroladminka' }, { login: 'pochta@rossii.ru', password: 'pipKASDSadadsf' }])}>Add passwords</Button>
 		</Group>}
+		<Footer openAbout={openAbout}/>
 	</Panel>
 );
 

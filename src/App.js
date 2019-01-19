@@ -22,6 +22,7 @@ class App extends React.Component {
 		};
 
 		this.onSearch = this.onSearch.bind(this);
+		this.openAbout = this.openAbout.bind(this);
 	}
 
 	componentDidMount() {
@@ -75,10 +76,12 @@ class App extends React.Component {
 			return (sign === vk_sign);
 	};
 
+	openAbout() { this.setState({ activePanel: 'persik' }); }
+
 	render() {
 		return (
 			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} passwords={this.state.passwords} onSearch={this.onSearch} search={this.state.search} result={this.passwords} />
+				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} passwords={this.state.passwords} onSearch={this.onSearch} search={this.state.search} result={this.passwords} openAbout={this.openAbout} />
 				<Persik id="persik" go={this.go} />
 			</View>
 		);
