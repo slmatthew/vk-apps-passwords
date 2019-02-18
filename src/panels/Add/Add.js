@@ -5,7 +5,7 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 const osname = platform();
 
-class Settings extends React.Component {
+class Add extends React.Component {
   constructor(props) {
     super(props);
 
@@ -99,4 +99,4 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+export default Add;
