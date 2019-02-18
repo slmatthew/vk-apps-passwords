@@ -3,13 +3,17 @@ import connect from '@vkontakte/vkui-connect';
 import { Root, View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import MainHome from './panels/Home/Main';
+import Home from './panels/Home/Home';
+import Passwords from './panels/Home/Passwords';
+import Settings from './panels/Home/Settings';
+import Help from './panels/Home/Help';
+import About from './panels/Home/About';
 
-import Adding from './panels/Adding/Main';
+import Add from './panels/Add/Add';
 
 const allowed = {
-	main: ['home', 'persik'],
-	adding: ['home'],
+	home: ['home', 'passwords', 'settings', 'help', 'about'],
+	add: ['add']
 };
 
 class App extends React.Component {
@@ -17,11 +21,10 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			activeView: 'main',
-			mainPanel: 'home',
-			addingPanel: 'home',
-			hacked: false,
-			fetchedUser: null
+			activeView: 'home',
+			homePanel: 'home',
+			addPanel: 'add',
+			fetchedUser: null,
 		};
 
 		this.go = this.go.bind(this);
@@ -39,31 +42,59 @@ class App extends React.Component {
 			}
 		});
 		connect.send('VKWebAppGetUserInfo', {});
+
+		window.addEventListener('popstate', e => e.preventDefault() & this.handlePop(e));
+		this.pushHistory('home', 'home');
+		this.pushHistory('home', 'home');
 	}
 
-	go(p) {
-		if(!allowed[this.state.activeView] || !allowed[this.state.activeView].includes(p)) {
-			this.setState({ hacked: true, activeView: 'hacked' });
+	handlePop = e => {
+		if(e.state) {
+			const name = `${e.state.view}Panel`
+			this.setState({ activeView: e.state.view, [name]: e.state.panel });
+		}
+	}
+
+	pushHistory = (v, p) => window.history.pushState({ view: v, panel: p }, `${v}/${p}`)
+
+	go(panel, back = false, newstate = undefined) {
+		if(!allowed[this.state.activeView].includes(panel) && !back) {
+			return;
+		}
+
+		if(newstate !== undefined) {
+			this.setState(newstate);
+		}
+
+		if(back) {
+			window.history.back();
 		} else {
-			if(this.state.activeView === 'main') {
-				this.setState({ mainPanel: p });
-			}
+			let name = `${this.state.activeView}Panel`;
+			this.setState({ [name]: panel });
+			this.pushHistory(this.state.activeView, panel);
 		}
 	}
 	changeView(activeView) {
-		if(allowed[activeView]) {
-			this.setState({ activeView });
+		if(!allowed[activeView]) {
+			return;
 		}
+
+		this.setState({ activeView })
+		this.pushHistory(activeView, this.state[`${activeView}Panel`])
 	}
 
 	render() {
 		return (
 			<Root activeView={this.state.activeView}>
-				<View activePanel={this.state.mainPanel} id="main">
-					<MainHome id="home" fetchedUser={this.state.fetchedUser} go={this.go} changeView={this.changeView} />
+				<View activePanel={this.state.homePanel} id="home">
+					<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
+					<Passwords id="passwords" go={this.go} changeView={this.changeView} />
+					<Settings id="settings" go={this.go} />
+					<Help id="help" go={this.go} />
+					<About id="about" go={this.go} />
 				</View>
-				<View activePanel={this.state.addingPanel} id="adding">
-					<Adding id="home" fetchedUser={this.state.fetchedUser} go={this.go} changeView={this.changeView} />
+				<View activePanel={this.state.addPanel} id="add">
+					<Add id="add" go={this.go} changeView={this.changeView} />
 				</View>
 			</Root>
 		);
