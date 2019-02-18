@@ -1,5 +1,5 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Cell, Avatar, Footer } from '@vkontakte/vkui';
+import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Header, Cell, Avatar, Footer, Link, ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
 
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
@@ -15,25 +15,65 @@ class Passwords extends React.Component {
   constructor(props) {
     super(props);
 
-    let list, isFooter = false;
+    let list, origList, isFooter = false;
     if(localStorage.list) {
-      list = JSON.parse(localStorage.list).map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={<Icon24FavoriteOutline />} description={row.pass}>{row.name}</Cell>)
+      list = JSON.parse(localStorage.list);
+
+      let list1 = list.filter(item => item.star);
+      let list2 = list.filter(item => !item.star);
+
+      origList = list1.concat(list2);
+
+      list = list1.concat(list2);
+      list = list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)
     } else {
       list = <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>
       isFooter = true
+      origList = []
     }
 
     this.state = {
       list: list,
+      origList: origList,
       isFooter: isFooter
     }
 
     this.getWord = this.getWord.bind(this)
+    this.updateItem = this.updateItem.bind(this)
+  }
+
+  updateItem(name, star) {
+    console.log(name, star);
+
+    if(localStorage.list) {
+      let list = JSON.parse(localStorage.list);
+      for(let i = 0; i < list.length; i++) {
+        if(list[i].name !== name) continue;
+
+        list[i].star = star;
+
+        let list1 = list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)
+
+        this.setState({ list: list1, origList: list, isFooter: false });
+
+        localStorage.list = JSON.stringify(list);
+      }
+    } else {
+      this.setState({
+        isFooter: true,
+        origList: [],
+        list: <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>
+      });
+    }
   }
 
   getWord() {
-    const words = ['пароль', 'пароля', 'паролей']
-    return `${JSON.parse(localStorage.list).length} ${words[this.getIndexByCount(JSON.parse(localStorage.list).length)]}`
+    if(localStorage.list) {
+      const words = ['пароль', 'пароля', 'паролей']
+      return `${JSON.parse(localStorage.list).length} ${words[this.getIndexByCount(JSON.parse(localStorage.list).length)]}`
+    } else {
+      return `0 паролей`
+    }
   }
   getIndexByCount(c) {
     let i = 2;
@@ -58,11 +98,30 @@ class Passwords extends React.Component {
     return i;
   }
 
+  openActionSheet = () => this.props.updateState({
+    homePopout:
+      <ActionSheet
+        onClose={() => this.props.updateState({ homePopout: null })}
+        title="Действия с паролями"
+        text="Выберите желаемое действие"
+      >
+        <ActionSheetItem autoclose>Редактировать пароли</ActionSheetItem>
+        <ActionSheetItem autoclose theme="destructive">Удалить пароли</ActionSheetItem>
+        {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+      </ActionSheet>
+  })
+  handleClose = () => {
+
+  }
+
   render() {
     return (
       <Panel id={this.props.id}>
         <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Список паролей</PanelHeader>
-        <Group title={this.getWord()}>
+        <Group>
+          <Header level="2" aside={<Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link>}>
+            {this.getWord()}
+          </Header>
           <Cell before={<Avatar size={48} style={{ background: 'transparent' }}><Icon28AddOutline fill="var(--accent)" /></Avatar>} onClick={() => this.props.changeView('add')}><span style={{ color: 'var(--accent)' }}>Добавить пароль</span></Cell>
           {!this.state.isFooter && this.state.list}
         </Group>

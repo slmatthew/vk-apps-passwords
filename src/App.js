@@ -24,6 +24,8 @@ class App extends React.Component {
 			activeView: 'home',
 			homePanel: 'home',
 			addPanel: 'add',
+			homePopout: null,
+			addPopout: null,
 			fetchedUser: null,
 		};
 
@@ -37,8 +39,7 @@ class App extends React.Component {
 				case 'VKWebAppGetUserInfoResult':
 					this.setState({ fetchedUser: e.detail.data });
 					break;
-				default:
-					console.log(e.detail.type);
+				default: break;
 			}
 		});
 		connect.send('VKWebAppGetUserInfo', {});
@@ -83,17 +84,19 @@ class App extends React.Component {
 		this.pushHistory(activeView, this.state[`${activeView}Panel`])
 	}
 
+	updateState = (newstate) => this.setState(newstate)
+
 	render() {
 		return (
 			<Root activeView={this.state.activeView}>
-				<View activePanel={this.state.homePanel} id="home">
+				<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
 					<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-					<Passwords id="passwords" go={this.go} changeView={this.changeView} />
+					<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
 					<Settings id="settings" go={this.go} />
 					<Help id="help" go={this.go} />
 					<About id="about" go={this.go} />
 				</View>
-				<View activePanel={this.state.addPanel} id="add">
+				<View activePanel={this.state.addPanel} popout={this.state.addPopout} id="add">
 					<Add id="add" go={this.go} changeView={this.changeView} />
 				</View>
 			</Root>

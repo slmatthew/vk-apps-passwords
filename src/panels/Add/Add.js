@@ -34,7 +34,7 @@ class Add extends React.Component {
         } else {
           try {
             let list = JSON.parse(localStorage.list);
-            list.push({ name: this.state.name, pass: this.state.pass });
+            list.push({ name: this.state.name, pass: this.state.pass, star: false });
             localStorage.list = JSON.stringify(list);
 
             this.setState({
@@ -50,7 +50,7 @@ class Add extends React.Component {
         }
       } else {
         try {
-          let list = [{ name: this.state.name, pass: this.state.pass }];
+          let list = [{ name: this.state.name, pass: this.state.pass, star: false }];
           localStorage.list = JSON.stringify(list);
 
           this.setState({
