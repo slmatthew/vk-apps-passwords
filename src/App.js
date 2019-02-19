@@ -5,6 +5,8 @@ import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
 import Passwords from './panels/Home/Passwords';
+import EditPasswords from './panels/Home/EditPasswords';
+import EditPassword from './panels/Home/EditPassword';
 import EditList from './panels/Home/EditList';
 import DeletePasswords from './panels/Home/DeletePasswords';
 import Settings from './panels/Home/Settings';
@@ -14,7 +16,7 @@ import About from './panels/Home/About';
 import Add from './panels/Add/Add';
 
 const allowed = {
-	home: ['home', 'passwords', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
+	home: ['home', 'passwords', 'editpasswords', 'editpassword', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
 	add: ['add']
 };
 
@@ -28,6 +30,7 @@ class App extends React.Component {
 			addPanel: 'add',
 			homePopout: null,
 			addPopout: null,
+			currentItem: {},
 			fetchedUser: null,
 		};
 
@@ -94,6 +97,8 @@ class App extends React.Component {
 				<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
 					<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
 					<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
+					<EditPasswords id="editpasswords" go={this.go} updateState={this.updateState} />
+					<EditPassword id="editpassword" go={this.go} currentItem={this.state.currentItem} />
 					<EditList id="editlist" go={this.go} />
 					<DeletePasswords id="deletepasswords" go={this.go} />
 					<Settings id="settings" go={this.go} />

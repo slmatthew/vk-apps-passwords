@@ -97,7 +97,7 @@ class Passwords extends React.Component {
   })
   handleClose = (type) => {
     switch(type) {
-      case 'edit': console.log(type); break;
+      case 'edit': this.props.go('editpasswords'); break;
 
       case 'list': this.props.go('editlist'); break;
 
