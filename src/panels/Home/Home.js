@@ -20,7 +20,7 @@ class Home extends React.Component {
         {this.props.fetchedUser &&
         <Group style={{ marginTop: 0 }}>
     			<ListItem
-    				before={this.props.fetchedUser.photo_200 ? <Avatar src={this.props.fetchedUser.photo_200}/> : null}
+    				before={this.props.fetchedUser.photo_200 ? <Avatar src={this.props.fetchedUser.photo_200}/> : <Avatar />}
     				description={this.props.fetchedUser.city && this.props.fetchedUser.city.title ? this.props.fetchedUser.city.title : ''}
     			>
     				{`${this.props.fetchedUser.first_name} ${this.props.fetchedUser.last_name}`}

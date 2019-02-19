@@ -1,6 +1,6 @@
 import React from 'react';
 import connect from '@vkontakte/vkui-connect';
-import { Root, View } from '@vkontakte/vkui';
+import { Root, View, ScreenSpinner } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
@@ -39,10 +39,12 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
+		this.setState({ homePopout: <ScreenSpinner /> });
+
 		connect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
-					this.setState({ fetchedUser: e.detail.data });
+					this.setState({ fetchedUser: e.detail.data, homePopout: null });
 					break;
 				default: break;
 			}
