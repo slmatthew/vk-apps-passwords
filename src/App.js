@@ -5,6 +5,7 @@ import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
 import Passwords from './panels/Home/Passwords';
+import EditList from './panels/Home/EditList';
 import DeletePasswords from './panels/Home/DeletePasswords';
 import Settings from './panels/Home/Settings';
 import Help from './panels/Home/Help';
@@ -13,7 +14,7 @@ import About from './panels/Home/About';
 import Add from './panels/Add/Add';
 
 const allowed = {
-	home: ['home', 'passwords', 'deletepasswords', 'settings', 'help', 'about'],
+	home: ['home', 'passwords', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
 	add: ['add']
 };
 
@@ -93,6 +94,7 @@ class App extends React.Component {
 				<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
 					<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
 					<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
+					<EditList id="editlist" go={this.go} />
 					<DeletePasswords id="deletepasswords" go={this.go} />
 					<Settings id="settings" go={this.go} />
 					<Help id="help" go={this.go} />

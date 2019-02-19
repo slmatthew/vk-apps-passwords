@@ -99,7 +99,7 @@ class Passwords extends React.Component {
     switch(type) {
       case 'edit': console.log(type); break;
 
-      case 'list': console.log(type); break;
+      case 'list': this.props.go('editlist'); break;
 
       case 'delete': this.props.go('deletepasswords'); break;
 
@@ -112,7 +112,7 @@ class Passwords extends React.Component {
       <Panel id={this.props.id}>
         <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Список паролей</PanelHeader>
         <Group>
-          <Header level="2" aside={this.state.isFooter ? null : <Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link>}>
+          <Header level="2" aside={this.state.list.length > 0 ? <Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link> : null}>
             {this.state.count}
           </Header>
           <Cell before={<Avatar size={48} style={{ background: 'transparent' }}><Icon28AddOutline fill="var(--accent)" /></Avatar>} onClick={() => this.props.changeView('add')}><span style={{ color: 'var(--accent)' }}>Добавить пароль</span></Cell>

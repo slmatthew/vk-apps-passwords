@@ -1,5 +1,5 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Header, Cell, Footer, Link } from '@vkontakte/vkui';
+import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Header, Cell, Footer } from '@vkontakte/vkui';
 
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
@@ -93,7 +93,7 @@ class DeletePasswords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Список паролей</PanelHeader>
+        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Удалить пароли</PanelHeader>
         <Group>
           <Header level="2">
             {this.state.count}
