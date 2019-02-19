@@ -15,64 +15,48 @@ class Passwords extends React.Component {
   constructor(props) {
     super(props);
 
-    let list, origList, isFooter = false;
+    this.state = {
+      list: [],
+      count: '0 паролей'
+    }
+
+    this.getCount = this.getCount.bind(this);
+  }
+  componentDidMount() {
     if(localStorage.list) {
-      list = JSON.parse(localStorage.list);
-
-      let list1 = list.filter(item => item.star);
-      let list2 = list.filter(item => !item.star);
-
-      origList = list1.concat(list2);
+      let list = JSON.parse(localStorage.list),
+          list1 = list.filter(item => item.star),
+          list2 = list.filter(item => !item.star);
 
       list = list1.concat(list2);
-      list = list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)
+      this.updateList(list);
     } else {
-      list = <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>
-      isFooter = true
-      origList = []
-    }
-
-    this.state = {
-      list: list,
-      origList: origList,
-      isFooter: isFooter
-    }
-
-    this.getWord = this.getWord.bind(this)
-    this.updateItem = this.updateItem.bind(this)
-  }
-
-  updateItem(name, star) {
-    console.log(name, star);
-
-    if(localStorage.list) {
-      let list = JSON.parse(localStorage.list);
-      for(let i = 0; i < list.length; i++) {
-        if(list[i].name !== name) continue;
-
-        list[i].star = star;
-
-        let list1 = list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)
-
-        this.setState({ list: list1, origList: list, isFooter: false });
-
-        localStorage.list = JSON.stringify(list);
-      }
-    } else {
-      this.setState({
-        isFooter: true,
-        origList: [],
-        list: <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>
-      });
+      this.updateList([]);
     }
   }
 
-  getWord() {
-    if(localStorage.list) {
+  updateList = list => {
+    this.setState({ list });
+    this.getCount(list);
+  }
+  updateItem = (name, star) => {
+    let list = this.state.list;
+    for(let i = 0; i < list.length; i++) {
+      if(list[i].name !== name) continue;
+
+      list[i].star = star;
+      this.updateList(list);
+
+      localStorage.list = JSON.stringify(list);
+    }
+  }
+
+  getCount(list) {
+    if(list.length > 0) {
       const words = ['пароль', 'пароля', 'паролей']
-      return `${JSON.parse(localStorage.list).length} ${words[this.getIndexByCount(JSON.parse(localStorage.list).length)]}`
+      this.setState({ count: `${list.length} ${words[this.getIndexByCount(list.length)]}` })
     } else {
-      return `0 паролей`
+      this.setState({ count: `0 паролей` })
     }
   }
   getIndexByCount(c) {
@@ -106,26 +90,37 @@ class Passwords extends React.Component {
         text="Выберите желаемое действие"
       >
         <ActionSheetItem autoclose onClick={() => this.handleClose('edit')}>Редактировать пароли</ActionSheetItem>
+        <ActionSheetItem autoclose onClick={() => this.handleClose('list')}>Редактировать порядок</ActionSheetItem>
         <ActionSheetItem autoclose theme="destructive" onClick={() => this.handleClose('delete')}>Удалить пароли</ActionSheetItem>
         {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
       </ActionSheet>
   })
-  handleClose = (type) => type === 'edit' ? console.log('edit') : this.props.go('deletepasswords')
+  handleClose = (type) => {
+    switch(type) {
+      case 'edit': console.log(type); break;
+
+      case 'list': console.log(type); break;
+
+      case 'delete': this.props.go('deletepasswords'); break;
+
+      default: console.error('неизвестное значение type:', type);
+    }
+  }
 
   render() {
     return (
       <Panel id={this.props.id}>
         <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Список паролей</PanelHeader>
         <Group>
-          <Header level="2" aside={<Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link>}>
-            {this.getWord()}
+          <Header level="2" aside={this.state.isFooter ? null : <Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link>}>
+            {this.state.count}
           </Header>
           <Cell before={<Avatar size={48} style={{ background: 'transparent' }}><Icon28AddOutline fill="var(--accent)" /></Avatar>} onClick={() => this.props.changeView('add')}><span style={{ color: 'var(--accent)' }}>Добавить пароль</span></Cell>
-          {!this.state.isFooter && this.state.list}
+          {this.state.list.length > 0 && this.state.list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)}
         </Group>
-        {this.state.isFooter && this.state.list}
+        {this.state.list.length <= 0 && <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>}
       </Panel>
-    )
+    );
   }
 }
 
