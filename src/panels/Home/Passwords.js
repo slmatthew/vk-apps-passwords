@@ -105,14 +105,12 @@ class Passwords extends React.Component {
         title="Действия с паролями"
         text="Выберите желаемое действие"
       >
-        <ActionSheetItem autoclose>Редактировать пароли</ActionSheetItem>
-        <ActionSheetItem autoclose theme="destructive">Удалить пароли</ActionSheetItem>
+        <ActionSheetItem autoclose onClick={() => this.handleClose('edit')}>Редактировать пароли</ActionSheetItem>
+        <ActionSheetItem autoclose theme="destructive" onClick={() => this.handleClose('delete')}>Удалить пароли</ActionSheetItem>
         {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
       </ActionSheet>
   })
-  handleClose = () => {
-
-  }
+  handleClose = (type) => type === 'edit' ? console.log('edit') : this.props.go('deletepasswords')
 
   render() {
     return (
