@@ -31,6 +31,7 @@ class App extends React.Component {
 			homePopout: null,
 			addPopout: null,
 			currentItem: {},
+			currentTheme: 'client_light',
 			fetchedUser: null,
 		};
 
@@ -41,11 +42,21 @@ class App extends React.Component {
 	componentDidMount() {
 		this.setState({ homePopout: <ScreenSpinner /> });
 
+		let themeChanged = false;
+
 		connect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
 					this.setState({ fetchedUser: e.detail.data, homePopout: null });
 					break;
+
+				case 'VKWebAppUpdateConfig':
+					if(localStorage.blockTheme && localStorage.blockTheme !== 'true') {
+						this.updateTheme(e.detail.data.scheme);
+						themeChanged = true;
+					}
+					break;
+
 				default: break;
 			}
 		});
@@ -54,6 +65,11 @@ class App extends React.Component {
 		window.addEventListener('popstate', e => e.preventDefault() & this.handlePop(e));
 		this.pushHistory('home', 'home');
 		this.pushHistory('home', 'home');
+
+		if(!themeChanged) {
+			let theme = localStorage.theme || 'client_light';
+			this.updateTheme(theme);
+		}
 	}
 
 	handlePop = e => {
@@ -93,6 +109,41 @@ class App extends React.Component {
 
 	updateState = (newstate) => this.setState(newstate)
 
+	updateTheme = (theme) => {
+		let valid;
+		switch(theme) {
+			case 'client_light': // светлая в VK for Android/iPhone
+				valid = true;
+				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#5281B9"});
+				break;
+
+			case 'client_dark': // тёмная в VK for Android/iPhone
+				valid = true;
+				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2F"});
+				break;
+
+			case 'space_gray': // светлая в VK Me
+				valid = true;
+				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2E"});
+				break;
+
+			case 'bright_light': // тёмная в VK Me
+				valid = true;
+				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "dark", "action_bar_color": "#FFFFFF"});
+				break;
+
+			default:
+				valid = false;
+				break;
+		}
+
+		if(valid) {
+			localStorage.theme = theme;
+			document.querySelector('body').setAttribute('scheme', theme);
+			this.setState({ currentTheme: theme });
+		}
+	}
+
 	render() {
 		return (
 			<Root activeView={this.state.activeView}>
@@ -103,8 +154,8 @@ class App extends React.Component {
 					<EditPassword id="editpassword" go={this.go} currentItem={this.state.currentItem} />
 					<EditList id="editlist" go={this.go} />
 					<DeletePasswords id="deletepasswords" go={this.go} />
-					<Settings id="settings" go={this.go} />
-					<Help id="help" go={this.go} />
+					<Settings id="settings" go={this.go} updateTheme={this.updateTheme} theme={this.state.currentTheme} />
+					<Help id="help" go={this.go} updateState={this.updateState} />
 					<About id="about" go={this.go} />
 				</View>
 				<View activePanel={this.state.addPanel} popout={this.state.addPopout} id="add">
