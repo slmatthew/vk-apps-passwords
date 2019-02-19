@@ -1,5 +1,5 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, FormLayout, FormStatus, Input, Button } from '@vkontakte/vkui';
+import { platform, IOS, Panel, PanelHeader, HeaderButton, FormLayout, FormStatus, Input, Button, Checkbox } from '@vkontakte/vkui';
 
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
@@ -13,7 +13,8 @@ class Add extends React.Component {
       status: null,
       success: false,
       name: localStorage.nameDraft ? localStorage.nameDraft : '',
-      pass: localStorage.passDraft ? localStorage.passDraft : ''
+      pass: localStorage.passDraft ? localStorage.passDraft : '',
+      favorite: false
     }
 
     this.addPassword = this.addPassword.bind(this)
@@ -34,7 +35,7 @@ class Add extends React.Component {
         } else {
           try {
             let list = JSON.parse(localStorage.list);
-            list.push({ name: this.state.name, pass: this.state.pass, star: false });
+            list.push({ name: this.state.name, pass: this.state.pass, star: this.state.favorite });
             localStorage.list = JSON.stringify(list);
 
             this.setState({
@@ -50,7 +51,7 @@ class Add extends React.Component {
         }
       } else {
         try {
-          let list = [{ name: this.state.name, pass: this.state.pass, star: false }];
+          let list = [{ name: this.state.name, pass: this.state.pass, star: this.state.favorite }];
           localStorage.list = JSON.stringify(list);
 
           this.setState({
@@ -92,6 +93,7 @@ class Add extends React.Component {
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />
           <Input top="Пароль" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
+          <Checkbox onChange={e => this.setState({ favorite: e.target.checked })}>Добавить в избранное</Checkbox>
           <Button size="xl" onClick={() => this.addPassword()}>Добавить</Button>
         </FormLayout>
       </Panel>
