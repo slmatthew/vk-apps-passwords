@@ -102,7 +102,7 @@ class EditPasswords extends React.Component {
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />
           <Input top="Пароль" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
-          <Checkbox onChange={e => this.setState({ star: e.target.checked })}>Добавить в избранное</Checkbox>
+          <Checkbox onChange={e => this.setState({ star: e.target.checked })} defaultChecked={this.props.currentItem.star}>Добавить в избранное</Checkbox>
           <Button size="xl" onClick={() => this.handleClick()}>Добавить</Button>
         </FormLayout>
       </Panel>
