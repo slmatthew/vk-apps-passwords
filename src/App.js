@@ -36,6 +36,9 @@ class App extends React.Component {
 			currentItem: {},
 			currentTheme: 'client_light',
 			fetchedUser: null,
+
+			homeHistory: ['home', 'home'],
+			addHistory: ['add', 'add']
 		};
 
 		this.go = this.go.bind(this);
@@ -77,8 +80,15 @@ class App extends React.Component {
 
 	handlePop = e => {
 		if(e.state) {
-			const name = `${e.state.view}Panel`
-			this.setState({ activeView: e.state.view, [name]: e.state.panel });
+			const { view, panel } = e.state;
+			const name = `${view}Panel`;
+			this.setState({ activeView: view, [name]: panel });
+
+			if(panel === 'home') {
+				connect.send('VKWebAppDisableSwipeBack');
+			} else {
+				connect.send('VKWebAppEnableSwipeBack');
+			}
 		}
 	}
 
@@ -96,9 +106,15 @@ class App extends React.Component {
 		if(back) {
 			window.history.back();
 		} else {
-			let name = `${this.state.activeView}Panel`;
+			const name = `${this.state.activeView}Panel`;
 			this.setState({ [name]: panel });
 			this.pushHistory(this.state.activeView, panel);
+
+			if(panel === 'home') {
+				connect.send('VKWebAppDisableSwipeBack');
+			} else {
+				connect.send('VKWebAppEnableSwipeBack');
+			}
 		}
 	}
 	changeView(activeView) {
@@ -151,7 +167,13 @@ class App extends React.Component {
 		return (
 			<ConfigProvider scheme={this.state.currentTheme}>
 				<Root activeView={this.state.activeView}>
-					<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
+					<View
+						id="home"
+						activePanel={this.state.homePanel}
+						popout={this.state.homePopout}
+						history={this.state.homeHistory}
+						onSwipeBack={() => this.go('', true)}
+					>
 						<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
 						<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
 						<EditPasswords id="editpasswords" go={this.go} updateState={this.updateState} />
@@ -162,7 +184,13 @@ class App extends React.Component {
 						<Help id="help" go={this.go} updateState={this.updateState} />
 						<About id="about" go={this.go} />
 					</View>
-					<View activePanel={this.state.addPanel} popout={this.state.addPopout} id="add">
+					<View
+						id="add"
+						activePanel={this.state.addPanel}
+						popout={this.state.addPopout}
+						history={this.state.addHistory}
+						onSwipeBack={() => this.go('', true)}
+					>
 						<Add id="add" go={this.go} changeView={this.changeView} />
 					</View>
 				</Root>
