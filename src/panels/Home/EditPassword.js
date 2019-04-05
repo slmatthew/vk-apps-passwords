@@ -2,8 +2,8 @@ import React from 'react';
 import {hot} from 'react-hot-loader';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
-import PanelHeaderClose from '@vkontakte/vkui/dist/components/PanelHeaderClose/PanelHeaderClose';
 import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
 import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
@@ -101,7 +101,7 @@ class EditPasswords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id} theme="white">
-        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Редактирование</PanelHeader>
+        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Редактирование</PanelHeader>
         <FormLayout>
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />

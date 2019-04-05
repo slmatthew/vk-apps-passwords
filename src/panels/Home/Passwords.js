@@ -18,6 +18,8 @@ import Icon24Services from '@vkontakte/icons/dist/24/services';
 import Icon24FavoriteOutline from '@vkontakte/icons/dist/24/favorite_outline';
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 
+import copyTextToClipboard from '../../helpers';
+
 const osname = platform();
 
 class Passwords extends React.Component {
@@ -116,6 +118,26 @@ class Passwords extends React.Component {
     }
   }
 
+  launchPasswordActions = item => this.props.updateState({
+    homePopout:
+      <ActionSheet
+        onClose={() => this.props.updateState({ homePopout: null })}
+        title={`Аккаунт «${item.name}»`}
+        text="Выберите действие"
+      >
+        <ActionSheetItem autoclose onClick={() => copyTextToClipboard(item.pass)}>Скопировать пароль</ActionSheetItem>
+        <ActionSheetItem autoclose onClick={() => this.updateItem(item.name, !item.star)}>{item.star ? 'Удалить из избранного' : 'Добавить в избранное'}</ActionSheetItem>
+        <ActionSheetItem autoclose onClick={() => {
+          this.props.updateState({ currentItem: item });
+          this.props.go('editpassword');
+        }}>
+          Редактировать аккаунт
+        </ActionSheetItem>
+        <ActionSheetItem autoclose theme="destructive" onClick={() => this.props.go('deletepasswords')}>Удалить аккаунт</ActionSheetItem>
+        {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+      </ActionSheet>
+  });
+
   render() {
     return (
       <Panel id={this.props.id}>
@@ -125,7 +147,21 @@ class Passwords extends React.Component {
             {this.state.count}
           </Header>
           <Cell before={<Avatar size={48} style={{ background: 'transparent' }}><Icon28AddOutline fill="var(--accent)" /></Avatar>} onClick={() => this.props.changeView('add')}><span style={{ color: 'var(--accent)' }}>Добавить пароль</span></Cell>
-          {this.state.list.length > 0 && this.state.list.map((row, i) => <Cell key={i} before={<Avatar><Icon24Services /></Avatar>} asideContent={row.star ? <Icon24Favorite fill="#FFA000" onClick={() => this.updateItem(row.name, !row.star)} /> : <Icon24FavoriteOutline onClick={() => this.updateItem(row.name, !row.star)} />} description={row.pass}>{row.name}</Cell>)}
+          {this.state.list.length > 0 && this.state.list.map((row, i) => (
+            <Cell
+              key={i}
+              before={<Avatar><Icon24Services /></Avatar>}
+              asideContent={
+                row.star ?
+                <Icon24Favorite fill="#FFA000" /> :
+                <Icon24FavoriteOutline />
+              }
+              description={row.pass}
+              onClick={() => this.launchPasswordActions(row)}
+            >
+              {row.name}
+            </Cell>
+          ))}
         </Group>
         {this.state.list.length <= 0 && <Footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Ничего не найдено</Footer>}
       </Panel>
@@ -133,4 +169,4 @@ class Passwords extends React.Component {
   }
 }
 
-export default Passwords;
+export default hot(module)(Passwords);
