@@ -1,19 +1,20 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Footer, Group, Cell } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
+import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 
 import logo from '../../img/logo.png';
 import '../Common.css';
-
-const osname = platform();
 
 class About extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>О приложении</PanelHeader>
+        <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>О приложении</PanelHeader>
         <img className="Image Logo" src={logo} alt="Logotype"/>
         <Footer>Public Beta 1, build 13 (original)</Footer>
         <Group>
@@ -26,4 +27,4 @@ class About extends React.Component {
   }
 }
 
-export default About;
+export default hot(module)(About);

@@ -1,12 +1,17 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, List, Cell, Header, Avatar, Footer } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import PanelHeaderClose from '@vkontakte/vkui/dist/components/PanelHeaderClose/PanelHeaderClose';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import List from '@vkontakte/vkui/dist/components/List/List';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Header from '@vkontakte/vkui/dist/components/Header/Header';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 
 import Icon24Services from '@vkontakte/icons/dist/24/services';
-
-const osname = platform();
 
 class EditPasswords extends React.Component {
   constructor(props) {
@@ -71,7 +76,7 @@ class EditPasswords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Редактирование</PanelHeader>
+        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Редактирование</PanelHeader>
         <Group>
           <Header level="2">{this.state.count}</Header>
           {this.state.list.length > 0 &&
@@ -95,4 +100,4 @@ class EditPasswords extends React.Component {
   }
 }
 
-export default EditPasswords;
+export default hot(module)(EditPasswords);

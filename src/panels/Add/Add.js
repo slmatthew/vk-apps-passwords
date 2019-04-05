@@ -1,9 +1,14 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, FormLayout, FormStatus, Input, Button, Checkbox } from '@vkontakte/vkui';
-
-import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
-
-const osname = platform();
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderClose from '@vkontakte/vkui/dist/components/PanelHeaderClose/PanelHeaderClose';
+import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
+import Input from '@vkontakte/vkui/dist/components/Input/Input';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Checkbox from '@vkontakte/vkui/dist/components/Checkbox/Checkbox';
+// import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
 
 class Add extends React.Component {
   constructor(props) {
@@ -88,7 +93,7 @@ class Add extends React.Component {
   render() {
     return (
       <Panel id={this.props.id} theme="white">
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? 'Отмена' : <Icon24Cancel />}</HeaderButton>}>Новый пароль</PanelHeader>
+        <PanelHeader left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Новый пароль</PanelHeader>
         <FormLayout>
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />
@@ -101,4 +106,4 @@ class Add extends React.Component {
   }
 }
 
-export default Add;
+export default hot(module)(Add);

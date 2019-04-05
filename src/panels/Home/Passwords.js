@@ -1,8 +1,17 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Header, Cell, Avatar, Footer, Link, ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Header from '@vkontakte/vkui/dist/components/Header/Header';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
+import Link from '@vkontakte/vkui/dist/components/Link/Link';
+import ActionSheet from '@vkontakte/vkui/dist/components/ActionSheet/ActionSheet';
+import ActionSheetItem from '@vkontakte/vkui/dist/components/ActionSheetItem/ActionSheetItem';
+import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
 
 import Icon28AddOutline from '@vkontakte/icons/dist/28/add_outline';
 import Icon24Services from '@vkontakte/icons/dist/24/services';
@@ -110,7 +119,7 @@ class Passwords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Список паролей</PanelHeader>
+        <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Список паролей</PanelHeader>
         <Group>
           <Header level="2" aside={this.state.list.length > 0 ? <Link style={{ cursor: 'pointer' }} onClick={() => this.openActionSheet()}>Действия</Link> : null}>
             {this.state.count}

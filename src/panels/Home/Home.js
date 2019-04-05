@@ -1,5 +1,10 @@
 import React from 'react';
-import { Panel, PanelHeader, Group, ListItem, Avatar, Cell } from '@vkontakte/vkui';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 
 import Icon24Settings from '@vkontakte/icons/dist/24/settings';
 import Icon24Privacy from '@vkontakte/icons/dist/24/privacy';
@@ -19,12 +24,12 @@ class Home extends React.Component {
         <PanelHeader>Меню</PanelHeader>
         {this.props.fetchedUser &&
         <Group style={{ marginTop: 0 }}>
-    			<ListItem
+    			<Cell
     				before={this.props.fetchedUser.photo_200 ? <Avatar src={this.props.fetchedUser.photo_200}/> : <Avatar />}
     				description={this.props.fetchedUser.city && this.props.fetchedUser.city.title ? this.props.fetchedUser.city.title : ''}
     			>
     				{`${this.props.fetchedUser.first_name} ${this.props.fetchedUser.last_name}`}
-    			</ListItem>
+    			</Cell>
         </Group>}
         <Group>
           <Cell before={<Icon24Privacy />} onClick={() => this.props.go('passwords')}>Список паролей</Cell>
@@ -39,4 +44,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default hot(module)(Home);

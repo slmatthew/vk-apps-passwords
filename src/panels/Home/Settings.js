@@ -1,12 +1,14 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, List, Cell, Switch } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import List from '@vkontakte/vkui/dist/components/List/List';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Switch from '@vkontakte/vkui/dist/components/Switch/Switch';
 
 import Icon24Done from '@vkontakte/icons/dist/24/done';
-
-const osname = platform();
 
 class Settings extends React.Component {
   constructor(props) {
@@ -42,7 +44,7 @@ class Settings extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Настройки</PanelHeader>
+        <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Настройки</PanelHeader>
         {this.state.list.length > 0 &&
         <Group>
           <List>
@@ -60,4 +62,4 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+export default hot(module)(Settings);

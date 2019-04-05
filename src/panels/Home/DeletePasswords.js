@@ -1,10 +1,13 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, Header, Cell, Footer } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
-
-const osname = platform();
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Header from '@vkontakte/vkui/dist/components/Header/Header';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 
 class DeletePasswords extends React.Component {
   constructor(props) {
@@ -93,7 +96,7 @@ class DeletePasswords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Удалить пароли</PanelHeader>
+        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Удалить пароли</PanelHeader>
         <Group>
           <Header level="2">
             {this.state.count}
@@ -106,4 +109,4 @@ class DeletePasswords extends React.Component {
   }
 }
 
-export default DeletePasswords;
+export default hot(module)(DeletePasswords);

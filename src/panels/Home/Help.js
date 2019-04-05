@@ -1,13 +1,17 @@
 import React from 'react';
-import { platform, IOS, Panel, PanelHeader, HeaderButton, Group, List, Cell, Alert, Footer } from '@vkontakte/vkui';
-
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
+import {hot} from 'react-hot-loader';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import PanelHeaderClose from '@vkontakte/vkui/dist/components/PanelHeaderClose/PanelHeaderClose';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import List from '@vkontakte/vkui/dist/components/List/List';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Alert from '@vkontakte/vkui/dist/components/Alert/Alert';
+import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 
 import persik from '../../img/persik.png';
 import '../Common.css';
 
-const osname = platform();
 const answers = require('./help.json');
 const words = ['статья', 'статьи', 'статей'];
 const index = (c) => {
@@ -52,7 +56,7 @@ class Help extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<HeaderButton onClick={() => this.props.go('', true)}>{osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}</HeaderButton>}>Помощь</PanelHeader>
+        <PanelHeader left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Помощь</PanelHeader>
         <img className="Image Persik" src={persik} alt="Persik The Cat"/>
         <Group>
           <List>
@@ -67,4 +71,4 @@ class Help extends React.Component {
   }
 }
 
-export default Help;
+export default hot(module)(Help);

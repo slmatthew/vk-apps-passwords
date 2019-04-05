@@ -1,6 +1,8 @@
 import React from 'react';
 import connect from '@vkontakte/vkui-connect';
-import { Root, View, ScreenSpinner } from '@vkontakte/vkui';
+import Root from '@vkontakte/vkui/dist/components/Root/Root';
+import View from '@vkontakte/vkui/dist/components/View/View';
+import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
