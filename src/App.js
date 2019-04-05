@@ -1,5 +1,6 @@
 import React from 'react';
 import connect from '@vkontakte/vkui-connect';
+import ConfigProvider from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider';
 import Root from '@vkontakte/vkui/dist/components/Root/Root';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
@@ -148,22 +149,24 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<Root activeView={this.state.activeView}>
-				<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
-					<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-					<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
-					<EditPasswords id="editpasswords" go={this.go} updateState={this.updateState} />
-					<EditPassword id="editpassword" go={this.go} currentItem={this.state.currentItem} />
-					<EditList id="editlist" go={this.go} />
-					<DeletePasswords id="deletepasswords" go={this.go} />
-					<Settings id="settings" go={this.go} updateTheme={this.updateTheme} theme={this.state.currentTheme} />
-					<Help id="help" go={this.go} updateState={this.updateState} />
-					<About id="about" go={this.go} />
-				</View>
-				<View activePanel={this.state.addPanel} popout={this.state.addPopout} id="add">
-					<Add id="add" go={this.go} changeView={this.changeView} />
-				</View>
-			</Root>
+			<ConfigProvider scheme={this.state.currentTheme}>
+				<Root activeView={this.state.activeView}>
+					<View activePanel={this.state.homePanel} popout={this.state.homePopout} id="home">
+						<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
+						<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
+						<EditPasswords id="editpasswords" go={this.go} updateState={this.updateState} />
+						<EditPassword id="editpassword" go={this.go} currentItem={this.state.currentItem} />
+						<EditList id="editlist" go={this.go} />
+						<DeletePasswords id="deletepasswords" go={this.go} />
+						<Settings id="settings" go={this.go} updateTheme={this.updateTheme} theme={this.state.currentTheme} />
+						<Help id="help" go={this.go} updateState={this.updateState} />
+						<About id="about" go={this.go} />
+					</View>
+					<View activePanel={this.state.addPanel} popout={this.state.addPopout} id="add">
+						<Add id="add" go={this.go} changeView={this.changeView} />
+					</View>
+				</Root>
+			</ConfigProvider>
 		);
 	}
 }
