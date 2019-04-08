@@ -167,7 +167,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<ConfigProvider scheme={this.state.currentTheme} isWebView={true}>
+			<ConfigProvider scheme={this.state.currentTheme}>
 				<Root activeView={this.state.activeView}>
 					<View
 						id="home"
