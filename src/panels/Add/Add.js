@@ -97,7 +97,7 @@ class Add extends React.Component {
         <FormLayout>
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />
-          <Input top="Пароль" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
+          <Input top="Пароль" type="password" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
           <Checkbox onChange={e => this.setState({ favorite: e.target.checked })}>Добавить в избранное</Checkbox>
           <Button size="xl" onClick={() => this.addPassword()}>Добавить</Button>
         </FormLayout>

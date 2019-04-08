@@ -18,6 +18,8 @@ import About from './panels/Home/About';
 
 import Add from './panels/Add/Add';
 
+import './common.css';
+
 const allowed = {
 	home: ['home', 'passwords', 'editpasswords', 'editpassword', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
 	add: ['add']
@@ -165,7 +167,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<ConfigProvider scheme={this.state.currentTheme}>
+			<ConfigProvider scheme={this.state.currentTheme} isWebView={true}>
 				<Root activeView={this.state.activeView}>
 					<View
 						id="home"

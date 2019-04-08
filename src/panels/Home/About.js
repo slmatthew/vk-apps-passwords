@@ -8,7 +8,6 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 
 import logo from '../../img/logo.png';
-import '../Common.css';
 
 class About extends React.Component {
   render() {

@@ -10,7 +10,6 @@ import Alert from '@vkontakte/vkui/dist/components/Alert/Alert';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 
 import persik from '../../img/persik.png';
-import '../Common.css';
 
 const answers = require('./help.json');
 const words = ['статья', 'статьи', 'статей'];
