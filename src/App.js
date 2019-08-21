@@ -1,5 +1,5 @@
 import React from 'react';
-import connect from '@vkontakte/vkui-connect';
+import connect from '@vkontakte/vk-connect';
 import ConfigProvider from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider';
 import Root from '@vkontakte/vkui/dist/components/Root/Root';
 import View from '@vkontakte/vkui/dist/components/View/View';

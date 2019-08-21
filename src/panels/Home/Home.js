@@ -1,5 +1,6 @@
 import React from 'react';
-import {hot} from 'react-hot-loader';
+import { hot } from 'react-hot-loader';
+
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
@@ -32,12 +33,12 @@ class Home extends React.Component {
     			</Cell>
         </Group>}
         <Group>
-          <Cell before={<Icon24Privacy />} onClick={() => this.props.go('passwords')}>Список паролей</Cell>
-          <Cell before={<Icon24Settings />} onClick={() => this.props.go('settings')}>Настройки</Cell>
-          <Cell before={<Icon24Help />} onClick={() => this.props.go('help')}>Помощь</Cell>
+          <Cell before={<Icon24Privacy />} onClick={() => this.props.go('passwords')} expandable>Список паролей</Cell>
+          <Cell before={<Icon24Settings />} onClick={() => this.props.go('settings')} expandable>Настройки</Cell>
+          <Cell before={<Icon24Help />} onClick={() => this.props.go('help')} expandable>Помощь</Cell>
         </Group>
         <Group>
-          <Cell before={<Icon24Info />} onClick={() => this.props.go('about')}>О приложении</Cell>
+          <Cell before={<Icon24Info />} onClick={() => this.props.go('about')} expandable>О приложении</Cell>
         </Group>
       </Panel>
     );
