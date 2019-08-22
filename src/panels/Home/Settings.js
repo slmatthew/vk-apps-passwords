@@ -47,7 +47,7 @@ class Settings extends React.Component {
       <Panel id={this.props.id}>
         <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Настройки</PanelHeader>
         {this.state.list.length > 0 &&
-        <Group>
+        <Group title="Цветовая схема">
           <List>
             {this.state.list.map((row, i) => (
               <Cell asideContent={this.props.theme === row.theme ? <Icon24Done fill="var(--accent)"/> : null} onClick={() => this.props.updateTheme(row.theme)}>{row.title}</Cell>
@@ -58,6 +58,17 @@ class Settings extends React.Component {
         <Group>
           <Cell asideContent={<Switch defaultChecked={localStorage.blockTheme === 'true'} onChange={() => {localStorage.blockTheme === 'true' ? localStorage.blockTheme = 'false' : localStorage.blockTheme = 'true'}} />}>Закрепить тему</Cell>
         </Group>}
+        <Group title="Данные">
+          <Cell
+            onClick={() => {
+              if(localStorage.getItem('list')) {
+                localStorage.removeItem('list');
+              }
+            }}
+            description={<span><b>Важно:</b> при очистке кеша будут удалены все добавленные Вами аккаунты</span>}
+            multiline
+          >Очистить кеш</Cell>
+        </Group>
       </Panel>
     );
   }

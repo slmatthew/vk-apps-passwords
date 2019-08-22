@@ -229,7 +229,7 @@ class App extends React.Component {
 					id={MODAL_CARD_CHANGELOG}
 					onClose={() => this.setActiveModal(null)}
 					icon={<Icon56MailOutline />}
-					title="Список изменений в версии 1.2 (5)"
+					title="Список изменений в версии 1.2 (6)"
 					caption={<span dangerouslySetInnerHTML={{ __html: changelog }} />}
 					actions={[{
 						title: 'Понятно',

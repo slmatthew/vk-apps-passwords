@@ -1,8 +1,6 @@
 const MODAL_CARD_CHANGELOG = 'changelog';
 
-const changelog = `— добавлен список изменений;<br />
-— добавлена система модальных окон;<br />
-— обновлены библиотеки.`;
+const changelog = `— добавлена возможность очистить кеш.`;
 
 const copyTextToClipboard = (text) => {
   console.log('text:', text);
