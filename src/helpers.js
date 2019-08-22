@@ -20,10 +20,14 @@ function copyTextToClipboard(text) {
     let successful = document.execCommand('copy');
     let msg = successful ? 'successful' : 'unsuccessful';
     console.log('Copying text command was ' + msg);
+    
+    return true;
   } catch (err) {
     console.error('Oops, unable to copy');
   }
   document.body.removeChild(textArea);
+
+  return false;
 }
 
 export default copyTextToClipboard;

@@ -12,7 +12,8 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import Link from '@vkontakte/vkui/dist/components/Link/Link';
 import ActionSheet from '@vkontakte/vkui/dist/components/ActionSheet/ActionSheet';
 import ActionSheetItem from '@vkontakte/vkui/dist/components/ActionSheetItem/ActionSheetItem';
-import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
+import Alert from '@vkontakte/vkui/dist/components/Alert/Alert';
+import { IS_PLATFORM_IOS } from '@vkontakte/vkui/dist/lib/platform';
 
 import Icon28AddOutline from '@vkontakte/icons/dist/28/add_outline';
 import Icon24Services from '@vkontakte/icons/dist/24/services';
@@ -20,8 +21,6 @@ import Icon24FavoriteOutline from '@vkontakte/icons/dist/24/favorite_outline';
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 
 import copyTextToClipboard from '../../helpers';
-
-const osname = platform();
 
 class Passwords extends React.Component {
   constructor(props) {
@@ -104,7 +103,7 @@ class Passwords extends React.Component {
         <ActionSheetItem autoclose onClick={() => this.handleClose('edit')}>Редактировать пароли</ActionSheetItem>
         <ActionSheetItem autoclose onClick={() => this.handleClose('list')}>Редактировать порядок</ActionSheetItem>
         <ActionSheetItem autoclose theme="destructive" onClick={() => this.handleClose('delete')}>Удалить пароли</ActionSheetItem>
-        {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+        {IS_PLATFORM_IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
       </ActionSheet>
   })
   handleClose = (type) => {
@@ -126,7 +125,39 @@ class Passwords extends React.Component {
         title={`Аккаунт «${item.name}»`}
         text="Выберите действие"
       >
-        <ActionSheetItem autoclose onClick={() => copyTextToClipboard(item.pass)}>Скопировать пароль</ActionSheetItem>
+        <ActionSheetItem autoclose onClick={() => {
+          if(copyTextToClipboard(item.pass)) {
+            this.props.updateState({
+              homePopout:
+                <Alert
+                  actions={[{
+                    title: 'Понятно',
+                    autoclose: true,
+                    style: 'cancel'
+                  }]}
+                  onClose={() => this.props.updateState({ homePopout: null })}
+                >
+                  <h2>Пароль скопирован</h2>
+                  <p>Вы успешно скопировали в буфер обмена пароль «{item.pass}»</p>
+                </Alert>
+            });
+          } else {
+            this.props.updateState({
+              homePopout:
+                <Alert
+                  actions={[{
+                    title: 'Понятно',
+                    autoclose: true,
+                    style: 'cancel'
+                  }]}
+                  onClose={() => this.props.updateState({ homePopout: null })}
+                >
+                  <h2>Упс!</h2>
+                  <p>Не удалось скопировать пароль</p>
+                </Alert>
+            });
+          }
+        }}>Скопировать пароль</ActionSheetItem>
         <ActionSheetItem autoclose onClick={() => this.updateItem(item.name, !item.star)}>{item.star ? 'Удалить из избранного' : 'Добавить в избранное'}</ActionSheetItem>
         <ActionSheetItem autoclose onClick={() => {
           this.props.updateState({ currentItem: item });
@@ -135,7 +166,7 @@ class Passwords extends React.Component {
           Редактировать аккаунт
         </ActionSheetItem>
         <ActionSheetItem autoclose theme="destructive" onClick={() => this.props.go('deletepasswords')}>Удалить аккаунт</ActionSheetItem>
-        {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+        {IS_PLATFORM_IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
       </ActionSheet>
   });
 

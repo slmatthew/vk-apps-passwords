@@ -77,7 +77,7 @@ class EditPasswords extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader addon={<HeaderButton onClick={() => this.props.go('', true)}>Назад</HeaderButton>} left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Редактирование</PanelHeader>
+        <PanelHeader left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Редактирование</PanelHeader>
         <Group>
           <Header level="2">{this.state.count}</Header>
           {this.state.list.length > 0 &&

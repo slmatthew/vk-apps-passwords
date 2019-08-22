@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
-import PanelHeaderClose from '@vkontakte/vkui/dist/components/PanelHeaderClose/PanelHeaderClose';
+import PanelHeaderBack from '@vkontakte/vkui/dist/components/PanelHeaderBack/PanelHeaderBack';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import List from '@vkontakte/vkui/dist/components/List/List';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
@@ -56,7 +56,7 @@ class Help extends React.Component {
   render() {
     return (
       <Panel id={this.props.id}>
-        <PanelHeader left={<PanelHeaderClose onClick={() => this.props.go('', true)} />}>Помощь</PanelHeader>
+        <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Помощь</PanelHeader>
         <img className="Image Persik" src={persik} alt="Persik The Cat"/>
         <Group>
           <List>

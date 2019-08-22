@@ -4,6 +4,7 @@ import ConfigProvider from '@vkontakte/vkui/dist/components/ConfigProvider/Confi
 import Root from '@vkontakte/vkui/dist/components/Root/Root';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
+
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
@@ -167,7 +168,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<ConfigProvider scheme={this.state.currentTheme}>
+			<ConfigProvider scheme={this.state.currentTheme} isWebView>
 				<Root activeView={this.state.activeView}>
 					<View
 						id="home"
