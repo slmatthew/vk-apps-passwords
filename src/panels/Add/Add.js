@@ -8,7 +8,7 @@ import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Checkbox from '@vkontakte/vkui/dist/components/Checkbox/Checkbox';
-// import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
+import SelectMimicry from '@vkontakte/vkui/dist/components/SelectMimicry/SelectMimicry';
 
 class Add extends React.Component {
   constructor(props) {
@@ -19,8 +19,21 @@ class Add extends React.Component {
       success: false,
       name: localStorage.nameDraft ? localStorage.nameDraft : '',
       pass: localStorage.passDraft ? localStorage.passDraft : '',
-      favorite: false
+      favorite: false,
+      chosen: props.chosen || 'default'
     }
+
+    this.names = {
+      default: 'Обычная',
+      vk: 'ВКонтакте',
+      fb: 'Facebook',
+      google: 'Google',
+      instagram: 'Instagram',
+      twitter: 'Twitter',
+      lj: 'Livejournal',
+      skype: 'Skype',
+      jh: 'Поиск работы'
+    };
 
     this.addPassword = this.addPassword.bind(this)
   }
@@ -40,7 +53,7 @@ class Add extends React.Component {
         } else {
           try {
             let list = JSON.parse(localStorage.list);
-            list.push({ name: this.state.name, pass: this.state.pass, star: this.state.favorite });
+            list.push({ name: this.state.name, pass: this.state.pass, star: this.state.favorite, icon: this.names[this.state.chosen] ? this.state.chosen : 'default' });
             localStorage.list = JSON.stringify(list);
 
             this.setState({
@@ -56,7 +69,7 @@ class Add extends React.Component {
         }
       } else {
         try {
-          let list = [{ name: this.state.name, pass: this.state.pass, star: this.state.favorite }];
+          let list = [{ name: this.state.name, pass: this.state.pass, star: this.state.favorite, icon: this.names[this.state.chosen] ? this.state.chosen : 'default' }];
           localStorage.list = JSON.stringify(list);
 
           this.setState({
@@ -98,6 +111,9 @@ class Add extends React.Component {
           {this.state.status}
           <Input top="Название аккаунта" value={this.state.name} onChange={e => this.setState({ name: e.target.value })} />
           <Input top="Пароль" type="password" value={this.state.pass} onChange={e => this.setState({ pass: e.target.value })} />
+          <SelectMimicry top="Выберите иконку" placeholder="Не выбрана" onClick={() => this.props.go('mimicry')}>
+            {this.names[this.state.chosen] || ''}
+          </SelectMimicry>
           <Checkbox onChange={e => this.setState({ favorite: e.target.checked })}>Добавить в избранное</Checkbox>
           <Button size="xl" onClick={() => this.addPassword()}>Добавить</Button>
         </FormLayout>

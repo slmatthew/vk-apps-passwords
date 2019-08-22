@@ -18,12 +18,13 @@ import Help from './panels/Home/Help';
 import About from './panels/Home/About';
 
 import Add from './panels/Add/Add';
+import SelectIcon from './panels/Add/SelectIcon';
 
 import './common.css';
 
 const allowed = {
 	home: ['home', 'passwords', 'editpasswords', 'editpassword', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
-	add: ['add']
+	add: ['add', 'mimicry']
 };
 
 class App extends React.Component {
@@ -39,6 +40,8 @@ class App extends React.Component {
 			currentItem: {},
 			currentTheme: 'client_light',
 			fetchedUser: null,
+			
+			chosenIcon: 'default',
 
 			homeHistory: ['home', 'home'],
 			addHistory: ['add', 'add']
@@ -108,6 +111,10 @@ class App extends React.Component {
 
 		if(back) {
 			window.history.back();
+
+			if(this.state.activeView === 'add' && this.state.addPanel === 'add') {
+				this.setState({ chosenIcon: 'default' });
+			}
 		} else {
 			const name = `${this.state.activeView}Panel`;
 			this.setState({ [name]: panel });
@@ -125,6 +132,10 @@ class App extends React.Component {
 			return;
 		}
 
+		if(this.state.activeView === 'add' && activeView !== 'add') {
+			this.setState({ chosenIcon: 'default' });
+		}
+
 		this.setState({ activeView })
 		this.pushHistory(activeView, this.state[`${activeView}Panel`])
 	}
@@ -136,22 +147,22 @@ class App extends React.Component {
 		switch(theme) {
 			case 'client_light': // светлая в VK for Android/iPhone
 				valid = true;
-				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#5281B9"});
+				if(connect.supports('VKWebAppSetViewSettings')) connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#5281B9"});
 				break;
 
 			case 'client_dark': // тёмная в VK for Android/iPhone
 				valid = true;
-				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2F"});
+				if(connect.supports('VKWebAppSetViewSettings')) connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2F"});
 				break;
 
 			case 'space_gray': // светлая в VK Me
 				valid = true;
-				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2E"});
+				if(connect.supports('VKWebAppSetViewSettings')) connect.send("VKWebAppSetViewSettings", {"status_bar_style": "light", "action_bar_color": "#2C2D2E"});
 				break;
 
 			case 'bright_light': // тёмная в VK Me
 				valid = true;
-				if(new URL(window.location.href).searchParams.get('vk_platform') !== 'desktop_web') connect.send("VKWebAppSetViewSettings", {"status_bar_style": "dark", "action_bar_color": "#FFFFFF"});
+				if(connect.supports('VKWebAppSetViewSettings')) connect.send("VKWebAppSetViewSettings", {"status_bar_style": "dark", "action_bar_color": "#FFFFFF"});
 				break;
 
 			default:
@@ -168,7 +179,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<ConfigProvider scheme={this.state.currentTheme} isWebView>
+			<ConfigProvider scheme={this.state.currentTheme}>
 				<Root activeView={this.state.activeView}>
 					<View
 						id="home"
@@ -194,7 +205,8 @@ class App extends React.Component {
 						history={this.state.addHistory}
 						onSwipeBack={() => this.go('', true)}
 					>
-						<Add id="add" go={this.go} changeView={this.changeView} />
+						<Add id="add" go={this.go} changeView={this.changeView} chosen={this.state.chosenIcon} />
+						<SelectIcon id="mimicry" go={this.go} chosen={this.state.chosenIcon} changeChosen={chosen => this.setState({ chosenIcon: chosen })} />
 					</View>
 				</Root>
 			</ConfigProvider>

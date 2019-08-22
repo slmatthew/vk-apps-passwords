@@ -19,6 +19,14 @@ import Icon28AddOutline from '@vkontakte/icons/dist/28/add_outline';
 import Icon24Services from '@vkontakte/icons/dist/24/services';
 import Icon24FavoriteOutline from '@vkontakte/icons/dist/24/favorite_outline';
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
+import Icon24LogoFacebook from '@vkontakte/icons/dist/24/logo_facebook';
+import Icon24LogoGoogle from '@vkontakte/icons/dist/24/logo_google';
+import Icon24LogoInstagram from '@vkontakte/icons/dist/24/logo_instagram';
+import Icon24LogoLivejournal from '@vkontakte/icons/dist/24/logo_livejournal';
+import Icon24LogoSkype from '@vkontakte/icons/dist/24/logo_skype';
+import Icon24LogoTwitter from '@vkontakte/icons/dist/24/logo_twitter';
+import Icon24LogoVk from '@vkontakte/icons/dist/24/logo_vk';
+import Icon24Work from '@vkontakte/icons/dist/24/work';
 
 import copyTextToClipboard from '../../helpers';
 
@@ -171,6 +179,22 @@ class Passwords extends React.Component {
   });
 
   render() {
+    const drawIcon = (names, row) => {
+      console.log('опа');
+
+      switch(row.icon) {
+        case 'default': default: return <Icon24Services />;
+        case 'vk': return <Icon24LogoVk />;
+        case 'fb': return <Icon24LogoFacebook />;
+        case 'google': return <Icon24LogoGoogle />;
+        case 'instagram': return <Icon24LogoInstagram />;
+        case 'twitter': return <Icon24LogoTwitter />;
+        case 'lj': return <Icon24LogoLivejournal />;
+        case 'skype': return <Icon24LogoSkype />;
+        case 'jh': return <Icon24Work />;
+      }
+    };
+
     return (
       <Panel id={this.props.id}>
         <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>Список паролей</PanelHeader>
@@ -182,7 +206,7 @@ class Passwords extends React.Component {
           {this.state.list.length > 0 && this.state.list.map((row, i) => (
             <Cell
               key={i}
-              before={<Avatar><Icon24Services /></Avatar>}
+              before={<Avatar>{['default', 'vk', 'fb', 'google', 'instagram', 'twitter', 'lj', 'skype', 'jh'].includes(row.icon) ? drawIcon(this.names, row) : <Icon24Services />}</Avatar>}
               asideContent={
                 row.star ?
                 <Icon24Favorite fill="#FFA000" /> :
