@@ -1,4 +1,10 @@
-function copyTextToClipboard(text) {
+const MODAL_CARD_CHANGELOG = 'changelog';
+
+const changelog = `— добавлен список изменений;<br />
+— добавлена система модальных окон;<br />
+— обновлены библиотеки.`;
+
+const copyTextToClipboard = (text) => {
   console.log('text:', text);
 
   let textArea = document.createElement("textarea");
@@ -30,4 +36,4 @@ function copyTextToClipboard(text) {
   return false;
 }
 
-export default copyTextToClipboard;
+export { copyTextToClipboard, MODAL_CARD_CHANGELOG, changelog };

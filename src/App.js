@@ -1,10 +1,15 @@
 import React from 'react';
-import connect from '@vkontakte/vk-connect';
-import ConfigProvider from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProvider';
-import Root from '@vkontakte/vkui/dist/components/Root/Root';
-import View from '@vkontakte/vkui/dist/components/View/View';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
+import connect from '@vkontakte/vk-connect';
+
+import {
+	ConfigProvider,
+	Root,
+	View,
+	ScreenSpinner,
+	ModalRoot,
+	ModalCard
+} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home/Home';
@@ -20,7 +25,11 @@ import About from './panels/Home/About';
 import Add from './panels/Add/Add';
 import SelectIcon from './panels/Add/SelectIcon';
 
+import Icon56MailOutline from '@vkontakte/icons/dist/56/mail_outline';
+
 import './common.css';
+
+import { MODAL_CARD_CHANGELOG, changelog } from './helpers';
 
 const allowed = {
 	home: ['home', 'passwords', 'editpasswords', 'editpassword', 'editlist', 'deletepasswords', 'settings', 'help', 'about'],
@@ -40,6 +49,9 @@ class App extends React.Component {
 			currentItem: {},
 			currentTheme: 'client_light',
 			fetchedUser: null,
+
+			activeModal: null,
+			modalHistory: [],
 			
 			chosenIcon: 'default',
 
@@ -49,6 +61,11 @@ class App extends React.Component {
 
 		this.go = this.go.bind(this);
 		this.changeView = this.changeView.bind(this);
+		this.setActiveModal = this.setActiveModal.bind(this);
+	
+		this.modalBack = () => {
+			this.setActiveModal(this.state.modalHistory[this.state.modalHistory.length - 2]);
+		};
 	}
 
 	componentDidMount() {
@@ -86,6 +103,16 @@ class App extends React.Component {
 
 	handlePop = e => {
 		if(e.state) {
+			if(this.state.activeModal) {
+				this.modalBack();
+				this.pushHistory(this.state.activeView, this.state[`${this.state.activeView}Panel`]);
+			}
+
+			if(this.state.homePopout || this.state.addPopout) {
+				this.setState({ homePopout: null, addPopout: null });
+				this.pushHistory(this.state.activeView, this.state[`${this.state.activeView}Panel`]);
+			}
+
 			const { view, panel } = e.state;
 			const name = `${view}Panel`;
 			this.setState({ activeView: view, [name]: panel });
@@ -177,7 +204,42 @@ class App extends React.Component {
 		}
 	}
 
+	setActiveModal(activeModal) {
+    activeModal = activeModal || null;
+    let modalHistory = this.state.modalHistory ? [...this.state.modalHistory] : [];
+
+    if(activeModal === null) {
+      modalHistory = [];
+    } else if(modalHistory.indexOf(activeModal) !== -1) {
+      modalHistory = modalHistory.splice(0, modalHistory.indexOf(activeModal) + 1);
+    } else {
+      modalHistory.push(activeModal);
+    }
+
+    this.setState({
+      activeModal,
+      modalHistory
+    });
+  }
+
 	render() {
+		const modal = (
+			<ModalRoot activeModal={this.state.activeModal}>
+				<ModalCard
+					id={MODAL_CARD_CHANGELOG}
+					onClose={() => this.setActiveModal(null)}
+					icon={<Icon56MailOutline />}
+					title="Список изменений в версии 1.2 (5)"
+					caption={<span dangerouslySetInnerHTML={{ __html: changelog }} />}
+					actions={[{
+						title: 'Понятно',
+						type: 'primary',
+						action: () => this.setActiveModal(null)
+					}]}
+				/>
+			</ModalRoot>
+		);
+
 		return (
 			<ConfigProvider scheme={this.state.currentTheme}>
 				<Root activeView={this.state.activeView}>
@@ -187,6 +249,7 @@ class App extends React.Component {
 						popout={this.state.homePopout}
 						history={this.state.homeHistory}
 						onSwipeBack={() => this.go('', true)}
+						modal={modal}
 					>
 						<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
 						<Passwords id="passwords" go={this.go} changeView={this.changeView} updateState={this.updateState} />
@@ -196,7 +259,7 @@ class App extends React.Component {
 						<DeletePasswords id="deletepasswords" go={this.go} />
 						<Settings id="settings" go={this.go} updateTheme={this.updateTheme} theme={this.state.currentTheme} />
 						<Help id="help" go={this.go} updateState={this.updateState} />
-						<About id="about" go={this.go} />
+						<About id="about" go={this.go} setActiveModal={this.setActiveModal} />
 					</View>
 					<View
 						id="add"
@@ -204,6 +267,7 @@ class App extends React.Component {
 						popout={this.state.addPopout}
 						history={this.state.addHistory}
 						onSwipeBack={() => this.go('', true)}
+						modal={modal}
 					>
 						<Add id="add" go={this.go} changeView={this.changeView} chosen={this.state.chosenIcon} />
 						<SelectIcon id="mimicry" go={this.go} chosen={this.state.chosenIcon} changeChosen={chosen => this.setState({ chosenIcon: chosen })} />

@@ -28,7 +28,7 @@ import Icon24LogoTwitter from '@vkontakte/icons/dist/24/logo_twitter';
 import Icon24LogoVk from '@vkontakte/icons/dist/24/logo_vk';
 import Icon24Work from '@vkontakte/icons/dist/24/work';
 
-import copyTextToClipboard from '../../helpers';
+import { copyTextToClipboard } from '../../helpers';
 
 class Passwords extends React.Component {
   constructor(props) {
