@@ -16,7 +16,7 @@ class About extends React.Component {
       <Panel id={this.props.id}>
         <PanelHeader left={<PanelHeaderBack onClick={() => this.props.go('', true)} />}>О приложении</PanelHeader>
         <img className="Image Logo" src={logo} alt="Logotype"/>
-        <Footer>Версия 1.1 (1)</Footer>
+        <Footer>Версия 1.2 (4)</Footer>
         <Group>
 			    <Cell href="https://vk.com/write-175680326" target="_blank">Обратная связь</Cell>
 			    <Cell href="https://vk.com/sbsrvc" target="_blank">Сообщество ВКонтакте</Cell>
